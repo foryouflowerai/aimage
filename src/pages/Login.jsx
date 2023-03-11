@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -14,8 +13,6 @@ function Login({setLogin}) {
   const [user, setUser] = useState({ password: "" });
   const [submit, setSubmit] = useState(false);
   const [passView, setPassView] = useState(false);
-
-
 
   const yourAccessToken =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYWltYWdlLmxvY2FsIiwiaWF0IjoxNjc4NTQ3NjQ1LCJuYmYiOjE2Nzg1NDc2NDUsImV4cCI6MTY3OTE1MjQ0NSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.6svM4-Buvny4gnJcc5UMH111HLHNJbZUtzfMoebYaVw";
@@ -56,13 +53,47 @@ function Login({setLogin}) {
       .catch((error) => console.error(error));
   };
 
-  const handleInput = () => {
-    
+  const handleInput = (event) => {
+     const target = event.target;
+     // const value = target.type === "checkbox" ? target.checked : target.value;
+     const value = target.value;
+     const name = target.name;
+
+     setUser({ ...user, [name]: value });
   }
 
   return (
-    <div>
-      <div className="">
+    <div className="h-screen p-2 flex justify-center w-full text-black">
+      <div
+        className="mt-4"
+        onClick={() => {
+          setInvalid(false);
+        }}
+      >
+        <div className="mb-4">
+          <label>
+            Your Email <span className="text-red-500">*</span>
+          </label>
+          <div className="flex relative items-center cursor-pointer">
+            <input
+              onChange={(e) => {
+                handleInput(e);
+              }}
+              name="email"
+              value={user.email}
+              className="block shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="eg: johndoe@gmail.com"
+            />
+            <div className="cursor-pointer right-0 absolute px-2 text-gray-700">
+              <img
+                src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-user-interface-kiranshastry-lineal-kiranshastry.png"
+                alt="user"
+                className="fill-current w-8"
+              />
+            </div>
+          </div>
+        </div>
         <div className="mb-4">
           <label>
             userName <span className="text-red-500">*</span>
