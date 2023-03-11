@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dots from "../res/dots.gif";
 import { useLocation } from "react-router-dom";
+import { generateImage } from "../api";
 
 const styl = {
   url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
@@ -31,21 +32,31 @@ const dum1 = [
 ];
 
 function Generate() {
-    const location = useLocation();
+  const location = useLocation();
   const [style, setStyle] = useState(styl);
   const [history, setHistory] = useState(dum1);
   const [painting, setPainting] = useState(true);
-  const [image, setImage] = useState({
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
-    prompt: "Abstract",
-  });
-    
-    useEffect(() => {
-        
-    }, [])
-    
-    
-    console.log("location",location)
+  const [prompt, setPrompt] = useState(true);
+  const [image, setImage] = useState({});
+  const [input, setInput] = useState("")
+
+  useEffect(() => {
+    setPrompt(location.state.prompt);
+  
+    getImage();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getImage = async () => {
+    setPainting(true);
+    const image = await generateImage(prompt);
+
+    console.log("api image", image);
+    setPainting(false);
+    setImage({ prompt: prompt, url: image.data[0].url });
+  }
+
+  console.log("gen image", image);
 
   return (
     <div className="p-4 h-screen">
@@ -57,6 +68,9 @@ function Generate() {
             </h1>
             <div className="text-justify pb-4">
               <textarea
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
                 type="text"
                 id="description"
                 className="bg-gray-200 w-full p-2.5 border shadow-md border-white text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block"
@@ -81,7 +95,13 @@ function Generate() {
                 </div>
               </div>
             </div>
-            <div className="py-2.5 text-center cursor-pointer text-white rounded bg-pink-600 hover:bg-pink-500">
+            <div
+              onClick={() => {
+                setPrompt(input);
+                getImage();
+              }}
+              className="py-2.5 text-center cursor-pointer text-white rounded bg-pink-600 hover:bg-pink-500"
+            >
               GENERATE
             </div>
             <div className="pt-6">
@@ -105,12 +125,14 @@ function Generate() {
               </div>
             )}
           </div>
-          <div className="min-h-[24rem] items-center mt-4 border">
+          <div className="min-h-[24rem] md:min-h-[30rem] items-center mt-4 border">
             <img
-              className="h-[24rem] py-2 mx-auto"
+              className="h-[24rem] md:min-h-[30rem] py-2 mx-auto"
               src={image.url}
-                          alt={image.prompt}
-                          onLoad={() => {setPainting(false)}}
+              alt={prompt}
+              onLoad={() => {
+                setPainting(false);
+              }}
             />
           </div>
         </div>

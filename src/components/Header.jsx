@@ -7,9 +7,9 @@ function Header() {
     <div className="z-40">
       <nav className="bg-white border-gray-200 px-2 sm:px-4 dark:bg-gray-800">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
-          <a href="https://flowbite.com/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img src={icon} className="h-6 mr-3 sm:h-16" alt="Flowbite Logo" />
-          </a>
+          </Link>
           <div className="flex">
             <div
               className="items-center justify-between hidden w-full md:flex md:w-auto"
@@ -35,7 +35,7 @@ function Header() {
                 </li>
                 <li>
                   <a
-                    href="l"
+                    href="/"
                     className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   >
                     Services
@@ -43,7 +43,7 @@ function Header() {
                 </li>
                 <li>
                   <a
-                    href="l"
+                    href="/"
                     className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   >
                     Contact

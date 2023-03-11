@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HomeExplore from "../components/HomeExplore";
 import { Link } from "react-router-dom";
-import { getContacts } from "../api";
-import { Axios } from "axios";
 
 const cards = [
   {
@@ -19,14 +17,31 @@ const cards = [
   },
 ];
 
+const dum2 = {
+  email: "janedoe@gmail.com",
+  name: "Jane Doe",
+  title: "Jane Doe",
+};
+
+const dum3 = {
+  title: "Cat and mouse",
+  fields: {
+    url: "https://thumbs.dreamstime.com/b/cat-mouse-looking-each-other-generative-ai-cat-mouse-looking-each-other-generative-ai-271514770.jpg",
+    prompt: "Cat and mouse",
+    style: "Abstract",
+    creator: 22,
+  },
+};
+
 function Home() {
   const [prompt, setPrompt] = useState("");
   const [images, setImages] = useState([]);
   const [creators, setCreators] = useState([]);
-  const [posts, setPosts] = useState([]);
+  
+  const [imageData, setImageData] = useState(dum3);
+
   useEffect(() => {
     async function loadPosts() {
-      const posts = await getContacts();
       const res = await fetch("http://aimage.local/wp-json/wp/v2/images");
       const resCreators = await fetch(
         "http://aimage.local/wp-json/wp/v2/creators"
@@ -34,11 +49,10 @@ function Home() {
       const images = await res.json();
       const creators = await resCreators.json();
 
-      setPosts(posts);
       setImages(images);
       setCreators(creators);
 
-      const response = await Axios.get(
+      const response = await fetch(
         "http://aimage.local/wp-json/jwt-auth/v1/token",
         {
           method: "POST",
@@ -54,7 +68,7 @@ function Home() {
 
       const data = await response.json();
 
-      console.log("tokens", data.token);
+      console.log("tokens", data);
 
       if (data.token) {
         return data.token;
@@ -66,9 +80,26 @@ function Home() {
     loadPosts();
   }, []);
 
-  console.log("posts", posts);
   console.log("images", images);
   console.log("creators", creators);
+
+  const yourAccessToken =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYWltYWdlLmxvY2FsIiwiaWF0IjoxNjc4NTQ3NjQ1LCJuYmYiOjE2Nzg1NDc2NDUsImV4cCI6MTY3OTE1MjQ0NSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.6svM4-Buvny4gnJcc5UMH111HLHNJbZUtzfMoebYaVw";
+
+  const addImage = () => {
+    console.log("adding", imageData);
+    fetch(`http://aimage.local/wp-json/wp/v2/images`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${yourAccessToken}`,
+      },
+      body: JSON.stringify(imageData),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  };
 
   const ImageCard = () => {
     return (
@@ -155,6 +186,14 @@ function Home() {
             </div>
           </div>
         </div>
+      </div>
+      <div
+        onClick={() => {
+          addImage();
+        }}
+        className="p-4 bg-pink-500 w-20"
+      >
+        add
       </div>
       <div id="explore" className="h-screen text-center p-4  text-black">
         <span className="text-4xl text-bold">Explore AI Generated Art</span>
