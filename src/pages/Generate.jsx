@@ -274,8 +274,8 @@ function Generate() {
               <span className="text-3xl border-b">Latest Searches</span>
               {history.slice(0, 4).map((history, index) => (
                 <div className="p-2" key={index}>
-                  Prompt: {history.node.prompt}
-                  <img className="w-28 mx-auto" src={history.node.url} alt="" />
+                  Prompt: {history.node?.prompt}
+                  <img className="w-28 mx-auto" src={history.node?.url} alt="" />
                 </div>
               ))}
             </div>
