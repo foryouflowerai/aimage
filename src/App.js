@@ -21,7 +21,7 @@ function App() {
         <div className="fixed top-0 w-full z-10">
           <Header />
         </div>
-        <div className="pt-12 md:pt-16">
+        <div className="pt-8 md:pt-10">
           <Routes>
             <Route exact path="/" element={<Home user={user } />} />
             <Route path="/generate" element={<Generate user={user} />} />
