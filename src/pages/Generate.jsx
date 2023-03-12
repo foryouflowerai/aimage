@@ -78,7 +78,7 @@ function Generate() {
   const [style, setStyle] = useState(cards[0]);
   const [isStyle, setIsStyle] = useState(false);
   const [history, setHistory] = useState(dum1);
-  const [painting, setPainting] = useState(true);
+  const [painting, setPainting] = useState(false);
   const [prompt, setPrompt] = useState({});
   const [image, setImage] = useState({});
   const [input, setInput] = useState({ style: style.text });
@@ -222,7 +222,7 @@ function Generate() {
   return (
     <div className="p-4 md:h-screen">
       <div className="md:grid grid-cols-4">
-        <div className="col-start-1 md:overflow-y-scroll md:h-screen col-span-1 md:border-r ">
+        <div className="col-start-1 pb-24 md:overflow-y-scroll md:h-screen col-span-1 md:border-r ">
           <div className="mx-auto pt-8 px-4">
             <h1 className="text-justify py-2 font-medium">
               What do you have in mind ?
@@ -272,10 +272,14 @@ function Generate() {
             </div>
             <div className="pt-6 hidden md:block">
               <span className="text-3xl border-b">Latest Searches</span>
-              {history.slice(0, 4).map((history, index) => (
+              {history.length && history.slice(0, 4).map((history, index) => (
                 <div className="p-2" key={index}>
                   Prompt: {history.node?.prompt}
-                  <img className="w-28 mx-auto" src={history.node?.url} alt="" />
+                  <img
+                    className="w-28 mx-auto"
+                    src={history.node?.url}
+                    alt=""
+                  />
                 </div>
               ))}
             </div>
@@ -322,8 +326,8 @@ function Generate() {
           <span className="text-3xl border-b">Latest Searches</span>
           {history.slice(0, 4).map((history, index) => (
             <div className="p-2" key={index}>
-              Prompt: {history.prompt}
-              <img className="w-28 mx-auto" src={history.url} alt="" />
+              Prompt: {history.node?.prompt}
+              <img className="w-28 mx-auto" src={history.node?.url} alt="" />
             </div>
           ))}
         </div>
