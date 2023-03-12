@@ -8,7 +8,7 @@ const configuration = new Configuration({
   apiKey: openapi,
 });
 
-console.log("open api",process.env.OPENAI_API_KEY);
+console.log("open api", process.env.OPENAI_API_KEY);
 
 const wp = new WPAPI(
   process.env.NODE_ENV === "development"
@@ -41,16 +41,18 @@ export async function getImages() {
 }
 
 export async function generateImage(prompt) {
+  console.log("api prompt", prompt)
   const openai = new OpenAIApi(configuration);
-  const response = await openai.createImage({
-    prompt: prompt,
-    n: 1,
-    size: "512x512",
-  });
+  try {
+    const response = await openai.createImage({
+      prompt: `${prompt.style} ${prompt.text}`,
+      n: prompt.num || 1,
+      size: prompt.size || "512x512",
+    });
 
-  // const image = await response.json();
-
-  console.log(response.data);
-  return response.data
+    console.log("api res",response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+  }
 }
-

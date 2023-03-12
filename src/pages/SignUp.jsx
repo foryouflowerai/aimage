@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import axios from "axios";
 
 function Login({ setLogin }) {
   const navigate = useNavigate();
@@ -15,66 +14,43 @@ function Login({ setLogin }) {
   const [user, setUser] = useState({ password: "" });
   const [submit, setSubmit] = useState(false);
   const [passView, setPassView] = useState(false);
-  // const [user, setUser] = useState({})
 
   const yourAccessToken =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYWltYWdlLmxvY2FsIiwiaWF0IjoxNjc4NTQ3NjQ1LCJuYmYiOjE2Nzg1NDc2NDUsImV4cCI6MTY3OTE1MjQ0NSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.6svM4-Buvny4gnJcc5UMH111HLHNJbZUtzfMoebYaVw";
 
-  // const [creator, setCreator] = useState(null);
-
-  // useEffect(() => {
-  //   async function fetchCreator() {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://aimage.local/wp-json/wp/v2/creators?per_page=100&fields=id,acf.acf_email`
-  //       );
-
-  //       // const res = response.json();
-  //       console.log("log res", response);
-
-  //       if (response.data && response.data.length > 0) {
-  //         setCreator(response.data[0]);
-  //       } else {
-  //         setCreator(null);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //   fetchCreator();
-  // }, []);
-
-  const addCreator = () => {
-     setSubmit(true);
-    const newCreator = {
-      title: user.userName,
-      fields: {
-        name: user.userName,
-        acf_email: user.email,
-        password: user.password,
-      }
-    }
-    console.log("adding", newCreator);
+  const handleSubmit = () => {
+    console.log("adding", creatorData);
+    setSubmit(true);
     fetch(`http://aimage.local/wp-json/wp/v2/creators`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${yourAccessToken}`,
       },
-      body: JSON.stringify(newCreator),
+      body: JSON.stringify({
+        title: creatorData.title,
+        fields: {
+          email: creatorData.email,
+          name: creatorData.name,
+        },
+      }),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data)
-        const user = { ...data.acf, id: data.id };
-         localStorage.setItem(
-           "aimageuser",
-           JSON.stringify(user)
-         );
-        setLogin(user)
+      .then((response) => {
+        const res = response.json();
+        if (res.data) {
+          setLogin({ ...res.data[user.group], type: user.group });
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ ...res.data[user.group], type: user.group })
+          );
+          res.json();
+          navigate("/");
+        } else {
+          setInvalid(true);
+        }
         setSubmit(false);
-        navigate("/");
       })
+      .then((data) => console.log(data))
       .catch((error) => console.error(error));
   };
 
@@ -129,7 +105,7 @@ function Login({ setLogin }) {
                 handleInput(e);
               }}
               name="userName"
-              value={user.userName?.toLowerCase()}
+              value={user.userName}
               className="block shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="eg: 01john"
@@ -179,7 +155,7 @@ function Login({ setLogin }) {
           ) : (
             <div>
               <button
-                onClick={() => addCreator()}
+                onClick={() => handleSubmit()}
                 className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded"
                 type="submit"
               >

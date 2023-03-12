@@ -17,28 +17,10 @@ const cards = [
   },
 ];
 
-const dum2 = {
-  email: "janedoe@gmail.com",
-  name: "Jane Doe",
-  title: "Jane Doe",
-};
-
-const dum3 = {
-  title: "Cat and mouse",
-  fields: {
-    url: "https://thumbs.dreamstime.com/b/cat-mouse-looking-each-other-generative-ai-cat-mouse-looking-each-other-generative-ai-271514770.jpg",
-    prompt: "Cat and mouse",
-    style: "Abstract",
-    creator: 22,
-  },
-};
-
 function Home() {
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState({});
   const [images, setImages] = useState([]);
   const [creators, setCreators] = useState([]);
-  
-  const [imageData, setImageData] = useState(dum3);
 
   useEffect(() => {
     async function loadPosts() {
@@ -81,52 +63,40 @@ function Home() {
   }, []);
 
   console.log("images", images);
+  console.log("prompt", prompt);
   console.log("creators", creators);
 
-  const yourAccessToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYWltYWdlLmxvY2FsIiwiaWF0IjoxNjc4NTQ3NjQ1LCJuYmYiOjE2Nzg1NDc2NDUsImV4cCI6MTY3OTE1MjQ0NSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.6svM4-Buvny4gnJcc5UMH111HLHNJbZUtzfMoebYaVw";
-
-  const addImage = () => {
-    console.log("adding", imageData);
-    fetch(`http://aimage.local/wp-json/wp/v2/images`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
-      body: JSON.stringify(imageData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  };
-
-  const ImageCard = () => {
+    const ImageCard = () => {
+      
     return (
       <div className="text-justify mb-4">
         <span className="">Choose a Preset Theme</span>
-        <div className="flex gap-4 py-2">
+        <div className="flex justify-between py-2">
           {cards.map((card, index) => {
+            const style = {
+              backgroundImage: `url(${card.url})`,
+              backgroundPosition: "top",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              filter: "brightness(40%)",
+              width: window.innerWidth <= 768 ? "6rem" : "7.7rem",
+              height: window.innerWidth <= 768 ? "4.5rem" : "5rem",
+              backgroundBlendMode: "darken",
+              borderRadius: "3px",
+            };
             return (
               <div
-                className="w-64 cursor-pointer relative rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:ring-blue-500 focus:border-blue-500"
+                onClick={(e) => {
+                    setPrompt({ ...prompt, style: card.text });
+                  }}
+                className="cursor-pointer relative rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:ring-blue-500 focus:border-blue-500"
                 key={index}
               >
                 <div
                   className="absolute -z-10"
-                  style={{
-                    backgroundImage: `url(${card.url})`,
-                    backgroundPosition: "top",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    filter: "brightness(40%)",
-                    width: "7.7rem",
-                    height: "5rem",
-                    backgroundBlendMode: "darken",
-                    borderRadius: "3px",
-                  }}
+                  style={style}
                 ></div>
-                <div className="pt-14 px-2">{card.text}</div>
+                <div className="pt-12 min-w-[7rem] md:pt-14 px-2">{card.text}</div>
               </div>
             );
           })}
@@ -136,7 +106,7 @@ function Home() {
   };
   return (
     <div className=" text-white overflow-hidden">
-      <div className="bg-local h-screen relative">
+      <div className="bg-local md:h-screen relative">
         <div
           className="absolute -z-10"
           style={{
@@ -146,12 +116,12 @@ function Home() {
             backgroundRepeat: "no-repeat",
             filter: "brightness(30%)",
             width: "100vw",
-            height: "100vh",
+            height: window.innerWidth >= 768 ? "100vh" : "70vh",
             backgroundBlendMode: "darken",
           }}
         ></div>
-        <div className="h-full flex justify-around">
-          <div className="text-center pt-[10%] md:w-[35rem]">
+        <div className="md:h-full flex justify-around">
+          <div className="text-center p-4 pt-[25%] md:pt-[10%] md:w-[35rem]">
             <span className="text-5xl font-bold py-4">
               AI Art Image Generator
             </span>
@@ -159,14 +129,14 @@ function Home() {
               Transform your thoughts to amazing and even award-wining works of
               art, All by Ai
             </h2>
-            <div className="md:w-[25rem] mx-auto">
+            <div className=" w-[20rem] md:w-[25rem] mx-auto">
               <h1 className="text-justify pt-2 font-medium">
                 What do you have in mind ?
               </h1>
               <div className="text-justify pb-4">
                 <input
                   onChange={(e) => {
-                    setPrompt(e.target.value);
+                    setPrompt({ ...prompt, text: e.target.value });
                   }}
                   type="text"
                   id="description"
@@ -179,7 +149,7 @@ function Home() {
               <Link
                 to="/generate"
                 state={{ prompt: prompt }}
-                className="px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
+                className="px-[7.5rem] md:px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
               >
                 GENERATE
               </Link>
@@ -187,16 +157,10 @@ function Home() {
           </div>
         </div>
       </div>
-      <div
-        onClick={() => {
-          addImage();
-        }}
-        className="p-4 bg-pink-500 w-20"
-      >
-        add
-      </div>
-      <div id="explore" className="h-screen text-center p-4  text-black">
-        <span className="text-4xl text-bold">Explore AI Generated Art</span>
+      <div id="explore" className="md:h-screen text-center p-4  text-black">
+        <span className="text-3xl md:text-4xl text-bold">
+          Explore AI Generated Art
+        </span>
         <HomeExplore />
       </div>
     </div>
