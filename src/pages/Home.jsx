@@ -89,7 +89,7 @@ function Home() {
                 onClick={(e) => {
                     setPrompt({ ...prompt, style: card.text });
                   }}
-                className="cursor-pointer relative rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:ring-blue-500 focus:border-blue-500"
+                className="cursor-pointer relative focus:opacity-100 rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:border-4 focus:ring-blue-500 focus:border-blue-500"
                 key={index}
               >
                 <div

@@ -76,7 +76,7 @@ function Generate() {
   const location = useLocation();
   // const [user, setUser] = useState(null);
   const [style, setStyle] = useState(cards[0]);
-  const [isStyle, setIsStyle] = useState(true);
+  const [isStyle, setIsStyle] = useState(false);
   // const [history, setHistory] = useState(dum1);
   const [painting, setPainting] = useState(true);
   const [prompt, setPrompt] = useState({});
