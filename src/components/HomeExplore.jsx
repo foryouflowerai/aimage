@@ -1,43 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const arts = [
+const dum1 = [
   {
-    url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://cdn.pixabay.com/photo/2023/02/15/17/23/ai-generated-7792328__340.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://cdn.pixabay.com/photo/2023/02/15/17/23/ai-generated-7792328__340.jpg",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
-    name: "Abstract",
+    node: {
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://static.fotor.com/app/features/img/aiimage/advance/a%20beautiful%20girl%20illustration%20style%20image%20created%20by%20ai%20art.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://static.fotor.com/app/features/img/aiimage/advance/a%20beautiful%20girl%20illustration%20style%20image%20created%20by%20ai%20art.jpg",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://cdn.pixabay.com/photo/2023/02/15/17/23/ai-generated-7792328__340.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://cdn.pixabay.com/photo/2023/02/15/17/23/ai-generated-7792328__340.jpg",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
-    name: "Abstract",
+    node: {
+      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
+      name: "Abstract",
+    },
   },
   {
-    url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
-    name: "Abstract",
+    node: {
+      url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
+      name: "Abstract",
+    },
   },
 ];
 
 function HomeExplore() {
-  // const [arts, setArts] = useState(dum1);
+  const [arts, setArts] = useState(dum1);
+
+  useEffect(() => {
+    const getArts = async () => {
+      fetch(`https://aimage-sheh.onrender.com/images`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("hist", data);
+          setArts((arts) => arts.concat(data.edges));
+        });
+    };
+
+    getArts();
+  }, []);
+
+  console.log(arts);
 
   const ArtCard = () => {
     return (
@@ -48,12 +79,12 @@ function HomeExplore() {
             <Link to="/explore" className="relative grow" key={index}>
               <img
                 className="w-full h-60 object-cover"
-                src={art.url}
-                alt={art.name}
+                src={art.node.url}
+                alt={art.node.name}
               />
               <div className="absolute inset-0 bg-black opacity-0 hover:opacity-50 transition-opacity">
                 <div className="text-white absolute inset-0 flex justify-center items-center">
-                  <p>{art.name}</p>
+                  <p>{art.node.name}</p>
                 </div>
               </div>
               <div className="text-white opacity-70 px-2 bg-black rounded absolute flex items-center cursor-pointer font-medium -mt-8 ">

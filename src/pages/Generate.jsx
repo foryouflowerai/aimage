@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import dots from "../res/dots.gif";
 import { useLocation } from "react-router-dom";
 import { generateImage } from "../api";
+import axios from "axios";
 
 const cards = [
   {
@@ -38,8 +39,7 @@ const cards = [
   },
 ];
 
-
-const history = [
+const dum1 = [
   {
     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
     prompt: "Abstract",
@@ -77,36 +77,34 @@ function Generate() {
   // const [user, setUser] = useState(null);
   const [style, setStyle] = useState(cards[0]);
   const [isStyle, setIsStyle] = useState(false);
-  // const [history, setHistory] = useState(dum1);
+  const [history, setHistory] = useState(dum1);
   const [painting, setPainting] = useState(true);
   const [prompt, setPrompt] = useState({});
   const [image, setImage] = useState({});
-  const [input, setInput] = useState({ style: style.text })
+  const [input, setInput] = useState({ style: style.text });
   // const [imageData, setImageData] = useState(dum3);
 
   useEffect(() => {
-    const user = JSON?.parse(localStorage?.getItem("aimageuser"));
+    // const user = JSON?.parse(localStorage?.getItem("aimageuser"));
     // user && setUser(user);
-    
+
     const getHistory = async () => {
-      console.log("ser", user)
-      fetch(`http://aimage.local/wp-json/wp/v2/creators/${user.id}`)
+      fetch(`https://aimage-sheh.onrender.com/images`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("hist", data)
-          // setHistory()
+          console.log("hist", data);
+          setHistory(data.edges)
         });
     }
-    
+
     getHistory()
 
     if (!location.state?.prompt) {
-      return
+      return;
     }
     setPrompt(location.state.prompt);
     const homePrompt = location.state.prompt;
 
-    
     const getImage1 = async () => {
       console.log("gens1 prompt", homePrompt);
       setPainting(true);
@@ -116,20 +114,19 @@ function Generate() {
       setPainting(false);
       setImage({ prompt: prompt.text, url: image.data[0].url });
 
-      const newImage = {
-        title: homePrompt.text,
-        fields: {
-          url: image.data[0].url,
-          prompt: homePrompt.text,
-          style: homePrompt.style,
-          creator: user?.id || 28,
-        },
-      };
+      
+      const newImage = {node: {
+        url: image.data[0].url,
+        prompt: homePrompt.text,
+        style: homePrompt.style,
+        creator_id: "clf5ly87qf6o60bmr6yqbb762",
+      }};
+      setHistory((history) => [newImage, ...history]);
       addImage(newImage);
     };
-  
+
     getImage1();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getImage = async () => {
@@ -140,28 +137,45 @@ function Generate() {
     console.log("api image", image);
     setPainting(false);
     setImage({ prompt: prompt.text, url: image.data[0].url });
-  }
-
-  const yourAccessToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYWltYWdlLmxvY2FsIiwiaWF0IjoxNjc4NTQ3NjQ1LCJuYmYiOjE2Nzg1NDc2NDUsImV4cCI6MTY3OTE1MjQ0NSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.6svM4-Buvny4gnJcc5UMH111HLHNJbZUtzfMoebYaVw";
-
-  const addImage = (newImage) => {
-    console.log("adding", newImage);
-    fetch(`http://aimage.local/wp-json/wp/v2/images`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${yourAccessToken}`,
-      },
-      body: JSON.stringify(newImage),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+    const newImage = {node: {
+      url: image.data[0].url,
+      prompt: prompt.text,
+      style: prompt.style,
+      creator_id: "clf5ly87qf6o60bmr6yqbb762",
+    }};
+    setHistory((history) => [newImage, ...history]);
+    addImage(newImage);
   };
 
+  const addImage = (image) => {
+    console.log("add image", image);
+    axios.post("https://aimage-sheh.onrender.com/images", image).then((res) => {
+      console.log(res.data)
+    });
+  };
+
+  function downloadImage(src) {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // This tells the browser to request cross-origin access when trying to download the image data.
+    // ref: https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image#Implementing_the_save_feature
+    img.src = src;
+    img.onload = () => {
+      // create Canvas
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      // create a tag
+      const a = document.createElement("a");
+      a.download = "download.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    };
+  }
+
   console.log("gen image", image);
-  console.log("gen input", input);
+  console.log("gen history", history);
   console.log("gens2 prompt", prompt);
 
   const ImageCard = () => {
@@ -194,7 +208,9 @@ function Generate() {
                     borderRadius: "3px",
                   }}
                 ></div>
-                <div className="pt-16 w-36 text-white md:pt-20 px-2 py-4">{card.text}</div>
+                <div className="pt-16 w-36 text-white md:pt-20 px-2 py-4">
+                  {card.text}
+                </div>
               </div>
             );
           })}
@@ -258,8 +274,8 @@ function Generate() {
               <span className="text-3xl border-b">Latest Searches</span>
               {history.slice(0, 4).map((history, index) => (
                 <div className="p-2" key={index}>
-                  Prompt: {history.prompt}
-                  <img className="w-28 mx-auto" src={history.url} alt="" />
+                  Prompt: {history.node.prompt}
+                  <img className="w-28 mx-auto" src={history.node.url} alt="" />
                 </div>
               ))}
             </div>
@@ -270,24 +286,34 @@ function Generate() {
             <ImageCard />
           ) : (
             <div className="">
-              <div className="flex justify-between w-full border p-2 text-2xl">
-                <span>Prompt: {image.prompt}</span>
-                {painting && (
-                  <div className="flex items-center gap-2">
-                    Painting
-                    <img src={dots} alt="loading" />
-                  </div>
-                )}
+              <div className="">
+                <div className="flex justify-between w-full border p-2 text-2xl">
+                  <span>Prompt: {image.prompt}</span>
+                  {painting && (
+                    <div className="flex items-center gap-2">
+                      Painting
+                      <img src={dots} alt="loading" />
+                    </div>
+                  )}
+                </div>
+                <div className="min-h-[24rem] md:min-h-[30rem] items-center mt-4 border">
+                  <img
+                    className="h-[24rem] md:min-h-[30rem] py-2 mx-auto"
+                    src={image.url}
+                    alt={prompt?.text}
+                    onLoad={() => {
+                      setPainting(false);
+                    }}
+                  />
+                </div>
               </div>
-              <div className="min-h-[24rem] md:min-h-[30rem] items-center mt-4 border">
-                <img
-                  className="h-[24rem] md:min-h-[30rem] py-2 mx-auto"
-                  src={image.url}
-                  alt={prompt?.text}
-                  onLoad={() => {
-                    setPainting(false);
-                  }}
-                />
+              <div
+                onClick={() => {
+                  downloadImage(image.url);
+                }}
+                className="float-right hidden cursor-pointer bg-green-600 mt-2 p-2 px-4 rounded "
+              >
+                Download
               </div>
             </div>
           )}

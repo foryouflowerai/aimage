@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import HomeExplore from "../components/HomeExplore";
 import { Link } from "react-router-dom";
 
@@ -19,55 +19,10 @@ const cards = [
 
 function Home() {
   const [prompt, setPrompt] = useState({});
-  const [images, setImages] = useState([]);
-  const [creators, setCreators] = useState([]);
 
-  useEffect(() => {
-    async function loadPosts() {
-      const res = await fetch("http://aimage.local/wp-json/wp/v2/images");
-      const resCreators = await fetch(
-        "http://aimage.local/wp-json/wp/v2/creators"
-      );
-      const images = await res.json();
-      const creators = await resCreators.json();
-
-      setImages(images);
-      setCreators(creators);
-
-      const response = await fetch(
-        "http://aimage.local/wp-json/jwt-auth/v1/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "collinsruto48",
-            password: "@11339134Word",
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      console.log("tokens", data);
-
-      if (data.token) {
-        return data.token;
-      } else {
-        throw new Error("Authentication failed");
-      }
-    }
-
-    loadPosts();
-  }, []);
-
-  console.log("images", images);
   console.log("prompt", prompt);
-  console.log("creators", creators);
 
-    const ImageCard = () => {
-      
+  const ImageCard = () => {
     return (
       <div className="text-justify mb-4">
         <span className="">Choose a Preset Theme</span>
@@ -87,16 +42,15 @@ function Home() {
             return (
               <div
                 onClick={(e) => {
-                    setPrompt({ ...prompt, style: card.text });
-                  }}
+                  setPrompt({ ...prompt, style: card.text });
+                }}
                 className="cursor-pointer relative focus:opacity-100 rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:border-4 focus:ring-blue-500 focus:border-blue-500"
                 key={index}
               >
-                <div
-                  className="absolute -z-10"
-                  style={style}
-                ></div>
-                <div className="pt-12 min-w-[7rem] md:pt-14 px-2">{card.text}</div>
+                <div className="absolute -z-10" style={style}></div>
+                <div className="pt-12 min-w-[7rem] md:pt-14 px-2">
+                  {card.text}
+                </div>
               </div>
             );
           })}
@@ -140,7 +94,7 @@ function Home() {
                   }}
                   type="text"
                   id="description"
-                  className="bg-transparent border shadow-md border-white text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  className="bg-transparent border shadow-md border-white text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="Eg. Master Kung-Fu Cat "
                   required
                 />
@@ -157,7 +111,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div id="explore" className="md:h-screen text-center p-4  text-black">
+      <div id="explore" className=" text-center p-4  text-black">
         <span className="text-3xl md:text-4xl text-bold">
           Explore AI Generated Art
         </span>
