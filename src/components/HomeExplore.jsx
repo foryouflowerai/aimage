@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const arts = [
   {
@@ -44,7 +45,7 @@ function HomeExplore() {
       <div className=" grid grid-cols-2 md:grid-cols-4 gap-2">
         {arts.map((art, index) => {
           return (
-            <div className="relative grow" key={index}>
+            <Link to="/explore" className="relative grow" key={index}>
               <img
                 className="w-full h-60 object-cover"
                 src={art.url}
@@ -69,7 +70,7 @@ function HomeExplore() {
                 />{" "}
                 246
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
