@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const dum1 = [
+const arts = [
   {
     url: "https://i.etsystatic.com/40764003/r/il/1c4a71/4578010138/il_340x270.4578010138_3aks.jpg",
     name: "Abstract",
@@ -36,7 +36,7 @@ const dum1 = [
 ];
 
 function HomeExplore() {
-  const [arts, setArts] = useState(dum1);
+  // const [arts, setArts] = useState(dum1);
 
   const ArtCard = () => {
     return (

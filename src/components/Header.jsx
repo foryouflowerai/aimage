@@ -7,8 +7,8 @@ function Header() {
   useEffect(() => {
     const user = JSON?.parse(localStorage?.getItem("aimageuser"));
     user && setUser(user);
-    console.log(user);
   }, []);
+  console.log(user);
   return (
     <div className="z-40">
       <nav className="bg-whit border-gray-200 px-2 sm:px-4 bg-gray-700">

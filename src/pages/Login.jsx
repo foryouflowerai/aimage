@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import axios from "axios";
 
 function Login({ setLogin }) {
   const navigate = useNavigate();
-  const [creatorData, setCreatorData] = useState({
-    email: "janedoe@gmail.com",
-    name: "Jane Doe",
-    title: "Jane Doe",
-    password: "janedoe",
-  });
-  const [invalid, setInvalid] = useState(false);
+  // const [creatorData, setCreatorData] = useState({
+  //   email: "janedoe@gmail.com",
+  //   name: "Jane Doe",
+  //   title: "Jane Doe",
+  //   password: "janedoe",
+  // });
+  // const [invalid, setInvalid] = useState(false);
   const [user, setUser] = useState({ password: "" });
   const [submit, setSubmit] = useState(false);
   const [passView, setPassView] = useState(false);
@@ -92,7 +91,7 @@ function Login({ setLogin }) {
       <div
         className="mt-4"
         onClick={() => {
-          setInvalid(false);
+          // setInvalid(false);
         }}
       >
         <div className="mb-4">

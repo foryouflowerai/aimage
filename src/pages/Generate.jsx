@@ -39,7 +39,7 @@ const cards = [
 ];
 
 
-const dum1 = [
+const history = [
   {
     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoZNQBDC3jnVy4c9O5pxNtwpXze6LmzLAZF1-zw6-bg-aZQ1q1cdMzmNJRLDnBESTIyKs&usqp=CAU",
     prompt: "Abstract",
@@ -62,22 +62,22 @@ const dum1 = [
   },
 ];
 
-const dum3 = {
-  title: "Cat and mouse",
-  fields: {
-    url: "https://thumbs.dreamstime.com/b/cat-mouse-looking-each-other-generative-ai-cat-mouse-looking-each-other-generative-ai-271514770.jpg",
-    prompt: "Cat and mouse",
-    style: "Abstract",
-    creator: 22,
-  },
-};
+// const dum3 = {
+//   title: "Cat and mouse",
+//   fields: {
+//     url: "https://thumbs.dreamstime.com/b/cat-mouse-looking-each-other-generative-ai-cat-mouse-looking-each-other-generative-ai-271514770.jpg",
+//     prompt: "Cat and mouse",
+//     style: "Abstract",
+//     creator: 22,
+//   },
+// };
 
 function Generate() {
   const location = useLocation();
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [style, setStyle] = useState(cards[0]);
   const [isStyle, setIsStyle] = useState(true);
-  const [history, setHistory] = useState(dum1);
+  // const [history, setHistory] = useState(dum1);
   const [painting, setPainting] = useState(true);
   const [prompt, setPrompt] = useState({});
   const [image, setImage] = useState({});
@@ -86,14 +86,15 @@ function Generate() {
 
   useEffect(() => {
     const user = JSON?.parse(localStorage?.getItem("aimageuser"));
-    user && setUser(user);
+    // user && setUser(user);
     
     const getHistory = async () => {
       console.log("ser", user)
       fetch(`http://aimage.local/wp-json/wp/v2/creators/${user.id}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("hist",data)
+          console.log("hist", data)
+          // setHistory()
         });
     }
     
