@@ -70,7 +70,7 @@ function Home() {
             backgroundRepeat: "no-repeat",
             filter: "brightness(30%)",
             width: "100vw",
-            height: window.innerWidth >= 768 ? "100vh" : "70vh",
+            height: window.innerWidth >= 768 ? "100vh" : "100vh",
             backgroundBlendMode: "darken",
           }}
         ></div>
@@ -103,7 +103,7 @@ function Home() {
               <Link
                 to="/generate"
                 state={{ prompt: prompt }}
-                className="px-[7.5rem] md:px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
+                className="px-[7.5rem] mt-4 md:px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
               >
                 GENERATE
               </Link>
