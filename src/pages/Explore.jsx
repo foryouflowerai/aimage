@@ -70,7 +70,7 @@ function Explore() {
   const ArtCard = () => {
     return (
       //   <div className="flex gap-3 justify-between flex-wrap">
-      <div className=" grid grid-cols-3 md:grid-cols-4 gap-2">
+      <div className=" grid grid-cols-2 md:grid-cols-4 gap-2">
         {images.map((image, index) => {
           return (
             <div className="relative grow" key={index}>
