@@ -19,12 +19,13 @@ const cards = [
 
 function Home() {
   const [prompt, setPrompt] = useState({});
+  const [select, setSelect] = useState()
 
   console.log("prompt", prompt);
 
   const ImageCard = () => {
     return (
-      <div className="hidden text-justify mb-4">
+      <div className=" text-justify mb-4">
         <span className="">Choose a Preset Theme</span>
         <div className="flex justify-between py-2">
           {cards.map((card, index) => {
@@ -33,23 +34,34 @@ function Home() {
               backgroundPosition: "top",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
-              filter: "brightness(40%)",
+              filter: select === index ? "brightness(80%)" : "brightness(40%)",
               width: window.innerWidth <= 768 ? "6rem" : "7.7rem",
               height: window.innerWidth <= 768 ? "4.5rem" : "5rem",
               backgroundBlendMode: "darken",
               borderRadius: "3px",
+              border: select === index && "2px solid white",
+              color: select === index ? "blue" : "white",
             };
             return (
-              <div
-                onClick={(e) => {
-                  setPrompt({ ...prompt, style: card.text });
-                }}
-                className="cursor-pointer relative focus:opacity-100 rounded hover:opacity-80 hover:bg-black hover:ring-blue-500 focus:border-4 focus:ring-blue-500 focus:border-blue-500"
-                key={index}
-              >
-                <div className="absolute -z-10" style={style}></div>
-                <div className="pt-12 min-w-[7rem] md:pt-14 px-2">
-                  {card.text}
+              <div className="focus:border-4 border-red-500" key={index}>
+                <div
+                  onClick={(e) => {
+                    setPrompt({ ...prompt, style: card.text });
+                    setSelect(index);
+                  }}
+                  className="cursor-pointer relative rounded hover:opacity-80 focus:opacity-90 hover:bg-black hover:ring-blue-500 "
+                >
+                  <div
+                    className="absolute -z-10 hover:border-4 focus:border-4 border-blue-500"
+                    style={style}
+                  ></div>
+                  <div
+                    className={` ${
+                      select === index ? "text-white" : "text-gray-300"
+                    } pt-12 min-w-[7rem] md:pt-14 px-2`}
+                  >
+                    {card.text}
+                  </div>
                 </div>
               </div>
             );
@@ -60,7 +72,7 @@ function Home() {
   };
   return (
     <div className=" text-white overflow-hidden">
-      <div className="bg-local h-screen relative">
+      <div className="bg-local h-[90vh] md:h-screen relative">
         <div
           className="absolute -z-10"
           style={{
@@ -70,8 +82,9 @@ function Home() {
             backgroundRepeat: "no-repeat",
             filter: "brightness(30%)",
             width: "100vw",
-            height: window.innerWidth >= 768 ? "100vh" : "100vh",
+            height: window.innerWidth >= 768 ? "100vh" : "90vh",
             backgroundBlendMode: "darken",
+            
           }}
         ></div>
         <div className="md:h-full flex justify-around">

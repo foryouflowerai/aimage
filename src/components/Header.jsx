@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import icon from "../res/icon.png";
+import icon from "../res/logo2.png";
 import { NavLink } from "react-router-dom";
 
 function Header() {
@@ -18,9 +18,14 @@ function Header() {
           <NavLink to="/" className="flex items-center">
             <img
               src={icon}
-              className="h-[3.5rem] mr-3 sm:h-16"
-              alt="Flowbite Logo"
+              className="h-[3rem] sm:h-12"
+              alt="For You"
             />
+            {/* <img
+              src={icon2}
+              className=" h-[1.5rem] mr-1 sm:h-8"
+              alt="For You"
+            /> */}
           </NavLink>
           <div className="flex">
             <div
