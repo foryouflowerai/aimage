@@ -3,12 +3,25 @@
 import WPAPI from "wpapi";
 import { Configuration, OpenAIApi } from "openai";
 
+function getCookie(name) {
+  let cookies = document.cookie?.split(';');
+  for(let i=0; i<cookies.length; i++) {
+    let cookie = cookies[i].trim();
+    if(cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+
+let openstring = getCookie("openstring");
+console.log("openstring", openstring); // prints "john"
+
+
 const openapi = "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";
 const configuration = new Configuration({
-  apiKey: openapi,
+  apiKey: openstring || openapi,
 });
-
-console.log("open api", process.env.OPENAI_API_KEY);
 
 const wp = new WPAPI(
   process.env.NODE_ENV === "development"

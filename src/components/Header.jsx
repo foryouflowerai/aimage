@@ -5,6 +5,8 @@ import { NavLink } from "react-router-dom";
 function Header() {
   const [user, setUser] = useState(null);
   const [opened, setOpened] = useState(false);
+  const [api, setApi] = useState("");
+  const [isApi, setIsApi] = useState(false);
 
   useEffect(() => {
     const user = JSON?.parse(localStorage?.getItem("aimageuser"));
@@ -16,11 +18,7 @@ function Header() {
       <nav className="bg-whit border-gray-200 px-2 sm:px-4 bg-gray-700">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
           <NavLink to="/" className="flex items-center">
-            <img
-              src={icon}
-              className="h-[3rem] sm:h-12"
-              alt="For You"
-            />
+            <img src={icon} className="h-[3rem] sm:h-12" alt="For You" />
             {/* <img
               src={icon2}
               className=" h-[1.5rem] mr-1 sm:h-8"
@@ -57,6 +55,16 @@ function Header() {
                   >
                     Explore
                   </NavLink>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      setIsApi(true);
+                    }}
+                    className={` block py-2 cursor-pointer pl-3 pr-2 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 `}
+                  >
+                    Api Key
+                  </div>
                 </li>
                 {/* <li>
                   <NavLink
@@ -123,21 +131,24 @@ function Header() {
               </button>
               <div className={`${opened ? "block " : "hidden md:block"}`}>
                 <div
-                  className="md:hidden absolute right-0 w-screen h-screen opacity-20 bg-blend-darken bg-black"
+                  className={`${
+                    opened || isApi ? "block " : "md:hidden"
+                  } absolute right-0 w-screen h-screen opacity-30 bg-blend-darken bg-black`}
                   onClick={() => {
-                    setOpened(!opened);
+                    setOpened(false);
+                    setIsApi(false);
                   }}
                 ></div>
                 <div
-                  onClick={() => {
-                    setOpened(!opened);
-                  }}
-                  className="
-                flex flex-col md:hidden absolute mt-12 right-0 w-[50%] md:w-60 px-2 py-8 h-screen opacity-100 bg-blend-darken bg-[#F7F6FB] overflow-y-auto "
+                  className={` ${isApi && "hidden "}
+                flex flex-col md:hidden absolute mt-12 right-0 w-[50%] md:w-60 px-2 py-8 h-screen opacity-100 bg-blend-darken bg-[#F7F6FB] overflow-y-auto `}
                 >
                   <ul className="flex flex-col text-gray-900 text-3xl p-4 mt-4 ">
                     <li>
                       <NavLink
+                        onClick={() => {
+                          setOpened(!opened);
+                        }}
                         to="/"
                         className={({ isActive }) =>
                           `${
@@ -151,6 +162,9 @@ function Header() {
                     </li>
                     <li>
                       <NavLink
+                        onClick={() => {
+                          setOpened(!opened);
+                        }}
                         to="/explore"
                         className={({ isActive }) =>
                           `${
@@ -160,6 +174,19 @@ function Header() {
                       >
                         Explore
                       </NavLink>
+                    </li>
+                    <li>
+                      <div
+                        onClick={() => {
+                          setIsApi(true);
+                        }}
+                        to="/explore"
+                        className={`${
+                          isApi ? "text-pink-500 " : "text-gray-500"
+                        } block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 `}
+                      >
+                        API Key
+                      </div>
                     </li>
                     {/* <li>
                       <NavLink
@@ -173,9 +200,50 @@ function Header() {
                         Services
                       </NavLink>
                     </li> */}
-                    
                   </ul>
                 </div>
+                {isApi && (
+                  <div className="flex mx-auto flex-col left-4 md:right-24 md:left-3/4 absolute mt-[50%] md:mt-[4%] w-[90%] md:w-96 px-2 py-4 rounded opacity-100 bg-blend-darken bg-[#F7F6FB]">
+                    <div className="mb-4 relative mt-4">
+                    <img
+                      onClick={() => {
+                        setIsApi(false);
+                        setOpened(false);
+                      }}
+                      className="w-8 absolute -right-1 -mt-7 h-8 ml-4 cursor-pointer"
+                      src="https://img.icons8.com/material-rounded/24/FF0000/multiply--v1.png"
+                      alt=""
+                    />
+                      <label>
+                        Entery your OpenAi Key{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <div className="flex mt-2 relative items-center cursor-pointer">
+                        <textarea
+                          onChange={(e) => {
+                            setApi(e.target.value);
+                          }}
+                          name="openai"
+                          value={api}
+                          className="block shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          type="text"
+                          placeholder="Your Api Key"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        document.cookie = `openstring=${api}`;
+                        setIsApi(false);
+                        setApi('')
+                      }}
+                      className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded"
+                      type="submit"
+                    >
+                      Add Key
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
