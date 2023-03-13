@@ -111,7 +111,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div id="explore" className=" text-center p-4  text-black">
+      <div id="explore" className=" hidden text-center p-4  text-black">
         <span className="text-3xl md:text-4xl text-bold">
           Explore AI Generated Art
         </span>
