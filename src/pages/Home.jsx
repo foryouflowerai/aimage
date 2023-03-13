@@ -24,7 +24,7 @@ function Home() {
 
   const ImageCard = () => {
     return (
-      <div className="text-justify mb-4">
+      <div className="hidden text-justify mb-4">
         <span className="">Choose a Preset Theme</span>
         <div className="flex justify-between py-2">
           {cards.map((card, index) => {
@@ -60,7 +60,7 @@ function Home() {
   };
   return (
     <div className=" text-white overflow-hidden">
-      <div className="bg-local md:h-screen relative">
+      <div className="bg-local h-screen relative">
         <div
           className="absolute -z-10"
           style={{
@@ -70,7 +70,7 @@ function Home() {
             backgroundRepeat: "no-repeat",
             filter: "brightness(30%)",
             width: "100vw",
-            height: window.innerWidth >= 768 ? "100vh" : "70vh",
+            height: window.innerWidth >= 768 ? "100vh" : "100vh",
             backgroundBlendMode: "darken",
           }}
         ></div>
@@ -103,7 +103,7 @@ function Home() {
               <Link
                 to="/generate"
                 state={{ prompt: prompt }}
-                className="px-[7.5rem] md:px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
+                className="px-[7.5rem] mt-4 md:px-40 py-2.5 cursor-pointer rounded bg-pink-600 hover:bg-pink-500"
               >
                 GENERATE
               </Link>
@@ -111,7 +111,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div id="explore" className=" text-center p-4  text-black">
+      <div id="explore" className=" hidden text-center p-4  text-black">
         <span className="text-3xl md:text-4xl text-bold">
           Explore AI Generated Art
         </span>
