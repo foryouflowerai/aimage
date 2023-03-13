@@ -24,7 +24,7 @@ function Home() {
 
   const ImageCard = () => {
     return (
-      <div className="text-justify mb-4">
+      <div className="hidden text-justify mb-4">
         <span className="">Choose a Preset Theme</span>
         <div className="flex justify-between py-2">
           {cards.map((card, index) => {
@@ -60,7 +60,7 @@ function Home() {
   };
   return (
     <div className=" text-white overflow-hidden">
-      <div className="bg-local md:h-screen relative">
+      <div className="bg-local h-screen relative">
         <div
           className="absolute -z-10"
           style={{
