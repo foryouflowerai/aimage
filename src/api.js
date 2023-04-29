@@ -18,7 +18,7 @@ let openstring = getCookie("openstring");
 console.log("openstring", openstring); // prints "john"
 
 
-const openapi = "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";
+const openapi = "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";
 const configuration = new Configuration({
   apiKey: openstring || openapi,
 });
